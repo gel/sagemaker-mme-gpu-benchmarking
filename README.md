@@ -5,9 +5,8 @@ This repo provides a sample implementation for benchmarking Real Time Inference 
 ## Usage
 Make sure that your AWS identity has the requisite permissions which includes ability to create SageMaker Resources (Model, EndpointConfigs, Endpoints, and Training Jobs) in addition to S3 access to upload model artifacts. Alternatively, you can attach the [AmazonSageMakerFullAccess](https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol.html#security-iam-awsmanpol-AmazonSageMakerFullAccess) managed policy to your IAM User or Role.
 
-Clone this repo into a Jupyter environment and run the provided notebooks
+Clone this repo into a Jupyter environment and run the provided notebook
 
-- [cv-benchmark.ipynb](cv-benchmark.ipynb) - Benchmark pretrained computer vision model either from torchvision or [timm](https://github.com/rwightman/pytorch-image-models) repos
 - [nlp_benchmark.ipynb](nlp_benchmark.ipynb) - Benchmark pretrained NLP models from 🤗 [Hugging Face Hub](https://huggingface.co/docs/hub/index)
 
 These notebook were tested in [SageMaker Studio](https://aws.amazon.com/sagemaker/studio/) on an **ml.c5.2xlarge** instance. An instance with 8 vCPU cores or greater is recommended for the load test.
@@ -18,9 +17,7 @@ Additional utilities are provided within subdirectories. These may be helpful fo
 ├── locust                      Contains the load testing python script
 │   └── locust_benchmark_sm.py
 ├── model_config_templates      Contains Triton configuration templates for the various model types
-│   ├── pt_cv_config.pbtxt
 │   ├── pt_nlp_config.pbtxt
-│   ├── trt_cv_config.pbtxt
 │   └── trt_nlp_config.pbtxt
 ├── server_metrics              A Triton Python backend model that can be used to query endpoint metrics in real-time
 │   ├── 1
@@ -38,24 +35,16 @@ When running the notebooks, results of the benchmark will be automatically writt
 ```
 ├── results
 │   ├── bert-base-uncased
-│   │   ├── ml.g4dn.2xlarge*pt*26_exceptions.csv
-│   │   ├── ml.g4dn.2xlarge*pt*26_failures.csv
-│   │   ├── ml.g4dn.2xlarge*pt*26_stats.csv
-│   │   ├── ml.g4dn.2xlarge*pt*26_stats_history.csv
-│   │   ├── ml.g4dn.2xlarge*trt*42_exceptions.csv
-│   │   ├── ml.g4dn.2xlarge*trt*42_failures.csv
-│   │   ├── ml.g4dn.2xlarge*trt*42_stats.csv
-│   │   ├── ml.g4dn.2xlarge*trt*42_stats_history.csv
+│   │   ├── ml.g4dn.xlarge*pt*23_exceptions.csv
+│   │   ├── ml.g4dn.xlarge*pt*23_failures.csv
+│   │   ├── ml.g4dn.xlarge*pt*23_stats.csv
+│   │   ├── ml.g4dn.xlarge*pt*23_stats_history.csv
 │   │   └── summary_results.csv
 ```
 In addition to the raw outputs, the notebook generates a pair of charts to provide a visual summary of the results.
 The first chart provides a line graph that plots latency and throughput metrics (y-axis) for increasing number of concurrent users (x-axis) and a bar graph that shows the count of successful and failed inference requests.
 
 <img src="images/chart1.png" width="800"/>
-
-The second chart shows a comparison of metrics between the PyTorch (libtorch) and TensorRT backends including the number of models loaded, the lowest latency, highest throughput, and the max number of concurrent users without any failed requests.
-
-<img src="images/chart2.png" width="800"/>
 
 ## Security
 

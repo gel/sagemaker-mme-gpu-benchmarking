@@ -9,3 +9,10 @@ results/
 trt_compile.sh
 triton-serve-pt/
 onnx-models/
+.DS_Store
+.idea/aws.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/sagemaker-mme-gpu-benchmarking.iml
+.idea/vcs.xml
