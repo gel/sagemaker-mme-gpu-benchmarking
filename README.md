@@ -1,4 +1,4 @@
-## SageMaker MME Benchmarking
+## SageMaker MME Benchmarking - RoBERTa base model
 
 This repo provides a sample implementation for benchmarking Real Time Inference workloads on GPU based SageMaker Multi-Model Endpoint (MME).SageMaker [multi-model endpoints](https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints.html) (MME) provide a scalable and cost-effective way to deploy  large numbers of ML models. It gives you the ability to deploy multiple ML models in a single serving container behind a single endpoint. From there, SageMaker will manage loading/unloading models and scaling resources on your behalf base on your traffic patterns. You will benefit from *sharing and re-using hosting resources* and a reduced *operational burden* from managing large quantity of models. 
 
