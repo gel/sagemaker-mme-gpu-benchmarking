@@ -197,3 +197,70 @@ def run_load_test(
         sample_payload_path.unlink()
 
     return output_path
+
+
+def run_autoscaling_load_test(
+    endpoint_name: str,
+    use_case: str,
+    model_name: str,
+    models_loaded: int,
+    output_path: Union[str, Path],
+    print_stdout: bool = False,
+    n_procs=6,
+    sample_payload:str = ""
+):
+    """Runs a load test on the endpoint using Locust
+
+    Args:
+        endpoint_name (str): Name of the endpoint
+        use_case (str): nlp or cv
+        model_name (str): name of the model
+        models_loaded (int): number of models loaded on the endpoint
+        output_path (Union[str, Path]): The path where benchmarking results will be stored
+        print_stdout (bool, optional): Prints the standard output from the locust script. Defaults to False.
+        n_procs (int, optional): Number of concurrent processes to use for the benchmark. Defaults to 4.
+        sample_payload (str, optional): json string containing the sample payload. Defaults to "".
+
+    Returns:
+        Path: path of the benchmark results
+    """
+
+    if print_stdout:
+        stdout = None
+    else:
+        stdout = subprocess.DEVNULL
+
+    output_path = Path(output_path)
+    
+    sample_payload_path = Path("sample_payload.json")
+    sample_payload_path.open("w").write(sample_payload)
+
+    main_command = f"locust -f locust/locust_autoscaling_benchmark_sm.py --master --endpoint-name {endpoint_name} --use-case {use_case} --payload {sample_payload_path.absolute().as_posix()} --model-name {model_name} --model-count {models_loaded} --headless --csv {output_path} --csv-full-history".split()
+    worker_command = f"locust -f locust/locust_autoscaling_benchmark_sm.py --worker --endpoint-name {endpoint_name} --use-case {use_case} --payload {sample_payload_path.absolute().as_posix()} --model-name {model_name} --model-count {models_loaded}".split()
+        
+    print("running load test")
+    main_proc = subprocess.Popen(main_command, stdout=stdout, stderr=subprocess.STDOUT, close_fds=True)
+    worker_procs = [
+        subprocess.Popen(worker_command, stdout=stdout, stderr=subprocess.STDOUT, close_fds=True) for _ in range(n_procs)
+    ]
+
+
+    try:
+        num_polls = 1
+        while main_proc.poll() == None:
+            if num_polls % 3 == 0:
+                reader = csv.DictReader(Path(str(output_path) + "_stats.csv").open("r"))
+                print(next(reader))
+            time.sleep(10)
+            num_polls += 1
+        print(f"load test completed with exit code {main_proc.returncode}\n")  
+        
+    except:
+        print("Load test interrupted or failed")
+    finally:
+        print("cleaning up")
+        main_proc.kill()
+        [proc.kill() for proc in worker_procs]
+        sample_payload_path.unlink()
+
+    return output_path
