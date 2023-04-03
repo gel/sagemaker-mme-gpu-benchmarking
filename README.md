@@ -8,6 +8,7 @@ Make sure that your AWS identity has the requisite permissions which includes ab
 Clone this repo into a Jupyter environment and run the provided notebook
 
 - [nlp_benchmark.ipynb](nlp_benchmark.ipynb) - Benchmark pretrained NLP models from 🤗 [Hugging Face Hub](https://huggingface.co/docs/hub/index)
+- [nlp_autoscaling_benchmark.ipynb](nlp_autoscaling_benchmark.ipynb) - Benchmark autoscaling pretrained NLP models from 🤗 [Hugging Face Hub](https://huggingface.co/docs/hub/index)
 
 These notebook were tested in [SageMaker Studio](https://aws.amazon.com/sagemaker/studio/) on an **ml.c5.2xlarge** instance. An instance with 8 vCPU cores or greater is recommended for the load test.
 
@@ -16,6 +17,7 @@ Additional utilities are provided within subdirectories. These may be helpful fo
 ```
 ├── locust                      Contains the load testing python script
 │   └── locust_benchmark_sm.py
+│   └── locust_autoscaling_benchmark_sm.py
 ├── model_config_templates      Contains Triton configuration templates for the various model types
 │   ├── pt_nlp_config.pbtxt
 │   └── trt_nlp_config.pbtxt
