@@ -119,16 +119,16 @@ class SimpleSendRequest(SageMakerUser):
 class StagesShape(LoadTestShape):
 
     stages = [
-        {"duration": 120, "users": 2, "spawn_rate": 2},
-        {"duration": 240, "users": 4, "spawn_rate": 2},
-        {"duration": 360, "users": 6, "spawn_rate": 2},
-        {"duration": 480, "users": 8, "spawn_rate": 2},
-        {"duration": 600, "users": 10, "spawn_rate": 2},
-        {"duration": 720, "users": 12, "spawn_rate": 2},
-        {"duration": 840, "users": 14, "spawn_rate": 2},
-        {"duration": 960, "users": 16, "spawn_rate": 2},
-        {"duration": 1080, "users": 18, "spawn_rate": 2},
-        {"duration": 1200, "users": 20, "spawn_rate": 2},
+        {"duration": 120, "users": 5, "spawn_rate": 2},
+        {"duration": 240, "users": 10, "spawn_rate": 2},
+        {"duration": 360, "users": 15, "spawn_rate": 2},
+        {"duration": 480, "users": 20, "spawn_rate": 2},
+        {"duration": 600, "users": 25, "spawn_rate": 2},
+        {"duration": 720, "users": 50, "spawn_rate": 5},
+        {"duration": 840, "users": 75, "spawn_rate": 5},
+        {"duration": 960, "users": 100, "spawn_rate": 10},
+        {"duration": 1080, "users": 150, "spawn_rate": 10},
+        {"duration": 1200, "users": 200, "spawn_rate": 10},
     ]
 
     def tick(self):
