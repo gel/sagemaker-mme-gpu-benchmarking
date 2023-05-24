@@ -18,6 +18,40 @@ import time
 import timm
 
 
+def get_triton_account(region):
+    triton_account_id_map = {
+        'us-east-1': '785573368785',
+        'us-east-2': '007439368137',
+        'us-west-1': '710691900526',
+        'us-west-2': '301217895009',
+        'eu-west-1': '802834080501',
+        'eu-west-2': '205493899709',
+        'eu-west-3': '254080097072',
+        'eu-north-1': '601324751636',
+        'eu-south-1': '966458181534',
+        'eu-central-1': '746233611703',
+        'ap-east-1': '110948597952',
+        'ap-south-1': '763008648453',
+        'ap-northeast-1': '941853720454',
+        'ap-northeast-2': '151534178276',
+        'ap-southeast-1': '324986816169',
+        'ap-southeast-2': '355873309152',
+        'cn-northwest-1': '474822919863',
+        'cn-north-1': '472730292857',
+        'sa-east-1': '756306329178',
+        'ca-central-1': '464438896020',
+        'me-south-1': '836785723513',
+        'af-south-1': '774647643957'
+    }
+    return triton_account_id_map[region]
+
+def get_triton_image_uri(region):
+    base = "amazonaws.com.cn" if region.startswith("cn-") else "amazonaws.com"
+    triton_account = get_triton_account(region)
+    image_uri = f"{triton_account}.dkr.ecr.{region}.{base}" + \
+                "/sagemaker-tritonserver:22.10-py3"
+    return image_uri
+
 def get_model_from_torch_hub(repo: str, model_name: str, pretrained:bool=True) -> torch.nn.Module:
     model = torch.hub.load(repo, model_name, pretrained=pretrained)
     model.eval()
@@ -31,10 +65,12 @@ def get_model_from_hf_hub(model_name:str):
 
     return tokenizer, model
 
+
 def get_model_from_timm(model_name: str, pretrained:bool=True) -> torch.nn.Module:
     model = timm.create_model(model_name, pretrained=pretrained)
     model.eval()
     return model
+
 
 def count_parameters(model):
     """Provides the number of parameters for the given model"""
